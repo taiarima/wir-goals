@@ -5,6 +5,7 @@ module.exports = {
     extend: {
       fontFamily: {
         title: ["Luckiest Guy", "cursive"],
+        subtitle: ["Bakbak One", "cursive"],
       },
     },
   },
