@@ -2,6 +2,7 @@ import Title from "./Components/Title";
 import LogActivity from "./Components/LogActivity";
 import GoalList from "./Components/GoalList";
 import Footer from "./Components/Footer";
+import AddGoalForm from "./Components/AddGoalForm";
 import { useState, useEffect } from "react";
 
 function App() {
@@ -155,25 +156,31 @@ function App() {
 
   const [showLogActivity, setShowLogActivity] = useState(false);
 
+  const [showAddGoal, setShowAddGoal] = useState(false);
+
   return (
     <div className="bg-blue-600 h-screen">
       <Title />
-      <div className="flex flex-row p-4 justify-center">
+      <div className="flex flex-col md:flex-row p-4 justify-center items-center">
         <GoalList
           goalList={goalList}
           onSetGoalList={onSetGoalList}
           handleSelectedGoal={handleSelectedGoal}
           selectedGoal={selectedGoal}
+          onSetShowAddGoal={setShowAddGoal}
+          className="w-full md:w-1/2"
         />
         {showLogActivity ? (
           <LogActivity
             goalList={goalList}
             selectedGoal={selectedGoal}
             handleLogNewActivity={handleLogNewActivity}
+            className="w-full md:w-1/2"
           />
         ) : (
           false
         )}
+        {showAddGoal ? <AddGoalForm className="w-full md:w-1/2" /> : false}
       </div>
       <Footer />
     </div>

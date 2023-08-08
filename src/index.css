@@ -13,7 +13,8 @@
   padding: 0.5rem; /* p-2 */
   text-align: center; /* text-center */
   font-size: 2.25rem; /* text-4xl */
-  width: 500px;
+  width: 100%;
+  max-width: 500px;
   height: 500px;
   color: #ffffff; /* text-white */
   display: flex;

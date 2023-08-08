@@ -6,6 +6,7 @@ export default function GoalList({
   goalList,
   selectedGoal,
   handleSelectedGoal,
+  onSetShowAddGoal,
 }) {
   return (
     <div className="goal-container overflow-y-auto">
@@ -24,7 +25,9 @@ export default function GoalList({
           )
         )}
       </ul>
-      <Button>Add New Goal</Button>
+      <Button onClick={() => onSetShowAddGoal((showing) => !showing)}>
+        Add New Goal
+      </Button>
     </div>
   );
 }
