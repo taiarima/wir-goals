@@ -1,4 +1,12 @@
-export default function GoalOverview({ goal }) {
+import Button from "./Button";
+
+export default function GoalOverview({
+  goal,
+  handleSelectedGoal,
+  onSetShowLogActivity,
+  onSetShowAddGoal,
+  showAddGoal,
+}) {
   const daysWithActivity = goal.activityLog.length;
   const activeDaysPercentage = getPercentageOfActiveDays(
     goal.dateCreated,
@@ -78,13 +86,17 @@ export default function GoalOverview({ goal }) {
   }
 
   return (
-    <div className="bg-white text-base text-blue-700 rounded p-4">
-      <div className="mb-4">
-        <h2 className="text-2xl font-bold mb-2">{goal.name}</h2>
-        <div className="flex justify-between">
-          <p>Created: {goal?.dateCreated ?? "Yesterday"}</p>
-          <p>Last Updated: {goal.lastUpdated}</p>
-        </div>
+    <div className="bg-white text-base text-blue-700 rounded p-4 m-2 relative">
+      <div
+        onClick={() => handleSelectedGoal(goal)}
+        className="mb-4 flex justify-center items-center bg-blue-500 text-white text-2xl cursor-pointer"
+      >
+        <h2 className=" font-bold mb-2">{goal.name}</h2>
+        <h2 className="absolute left-4 p-2">{goal.emoji}</h2>
+      </div>
+      <div className="flex justify-between">
+        <p>Created: {goal?.dateCreated ?? "Yesterday"}</p>
+        <p>Last Updated: {goal.lastUpdated}</p>
       </div>
 
       <div className="mb-4">
@@ -110,6 +122,20 @@ export default function GoalOverview({ goal }) {
         <p>
           📊 Average per day: {averagePerDay} {goal.units}
         </p>
+      </div>
+      <div className="border border-blue-500 inline-block rounded m-2">
+        <Button
+          onClick={() => {
+            onSetShowLogActivity((prevShowLogActivity) => {
+              if (showAddGoal) {
+                onSetShowAddGoal(false);
+              }
+              return !prevShowLogActivity;
+            });
+          }}
+        >
+          Log Activity
+        </Button>
       </div>
     </div>
   );

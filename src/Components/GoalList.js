@@ -7,6 +7,9 @@ export default function GoalList({
   selectedGoal,
   handleSelectedGoal,
   onSetShowAddGoal,
+  showAddGoal,
+  onSetShowLogActivity,
+  showLogActivity,
 }) {
   return (
     <div className="goal-container overflow-y-auto">
@@ -14,7 +17,13 @@ export default function GoalList({
       <ul>
         {goalList.map((goal) =>
           goal === selectedGoal ? (
-            <GoalOverview goal={goal} />
+            <GoalOverview
+              goal={goal}
+              handleSelectedGoal={handleSelectedGoal}
+              onSetShowLogActivity={onSetShowLogActivity}
+              onSetShowAddGoal={onSetShowAddGoal}
+              showAddGoal={showAddGoal}
+            />
           ) : (
             <Goal
               goal={goal}
@@ -25,7 +34,16 @@ export default function GoalList({
           )
         )}
       </ul>
-      <Button onClick={() => onSetShowAddGoal((showing) => !showing)}>
+      <Button
+        onClick={() => {
+          onSetShowAddGoal((prevShowAddGoal) => {
+            if (showLogActivity) {
+              onSetShowLogActivity(false);
+            }
+            return !prevShowAddGoal;
+          });
+        }}
+      >
         Add New Goal
       </Button>
     </div>

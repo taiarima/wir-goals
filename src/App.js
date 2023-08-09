@@ -168,6 +168,9 @@ function App() {
           handleSelectedGoal={handleSelectedGoal}
           selectedGoal={selectedGoal}
           onSetShowAddGoal={setShowAddGoal}
+          showAddGoal={showAddGoal}
+          onSetShowLogActivity={setShowLogActivity}
+          showLogActivity={showLogActivity}
           className="w-full md:w-1/2"
         />
         {showLogActivity ? (
