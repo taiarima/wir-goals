@@ -7,14 +7,36 @@ export default function GoalOverview({
   onSetShowAddGoal,
   showAddGoal,
 }) {
-  const daysWithActivity = goal.activityLog.length;
+  const daysWithActivity = getDaysWithActivitySinceCreation(
+    goal.activityLog,
+    goal.dateCreated
+  );
   const activeDaysPercentage = getPercentageOfActiveDays(
     goal.dateCreated,
     daysWithActivity
   );
   const longestStreak = calcLongestStreak(goal.activityLog);
   const bestDay = mostProductiveDay(goal.activityLog);
-  const averagePerDay = Math.round(goal.accUnits / daysWithActivity);
+  const averagePerDay = Math.round(goal.accUnits / goal.activityLog.length);
+
+  function getDaysWithActivitySinceCreation(activityLog, creationDateStr) {
+    // Sort the activityLog by date
+    const sortedLog = [...activityLog].sort(
+      (a, b) => new Date(a.date) - new Date(b.date)
+    );
+
+    // Find the index of the first entry on or after the creation date
+    const creationDate = new Date(creationDateStr);
+    const startIndex = sortedLog.findIndex(
+      (activity) => new Date(activity.date) >= creationDate
+    );
+
+    // If no entry on or after the creation date is found, return 0
+    if (startIndex === -1) return 0;
+
+    // Return the length of the items from startIndex to the end
+    return sortedLog.length - startIndex;
+  }
 
   function getPercentageOfActiveDays(dateCreatedStr, daysWithActivity) {
     // Convert dateCreated to a Date object
@@ -29,6 +51,8 @@ export default function GoalOverview({
 
     // Convert the difference from milliseconds to days
     const differenceInDays = Math.floor(differenceInMs / (1000 * 60 * 60 * 24));
+
+    if (differenceInDays === 0) return 100;
 
     // Return the percentage
     return Math.round((daysWithActivity / differenceInDays) * 100);
@@ -71,6 +95,8 @@ export default function GoalOverview({
   }
 
   function mostProductiveDay(activityLog) {
+    if (activityLog.length === 0) return null;
+
     let maxUnits = 0;
     let mostProductive = null;
 
@@ -89,38 +115,51 @@ export default function GoalOverview({
     <div className="bg-white text-base text-blue-700 rounded p-4 m-2 relative">
       <div
         onClick={() => handleSelectedGoal(goal)}
-        className="mb-4 flex justify-center items-center bg-blue-500 text-white text-2xl cursor-pointer"
+        className="mb-4 flex flex-col justify-center items-center relative bg-blue-500 text-white  cursor-pointer"
       >
-        <h2 className=" font-bold mb-2">{goal.name}</h2>
-        <h2 className="absolute left-4 p-2">{goal.emoji}</h2>
+        <h2 className="font-bold mb-2 text-2xl">{goal.name}</h2>
+        <h3 className="text-base">{goal.desc}</h3>
+        <h2 className="text-2xl absolute left-4 p-2 top-1/2 transform -translate-y-1/2">
+          {goal.emoji}
+        </h2>
       </div>
+
       <div className="flex justify-between">
-        <p>Created: {goal?.dateCreated ?? "Yesterday"}</p>
-        <p>Last Updated: {goal.lastUpdated}</p>
+        <p>Created: {goal.dateCreated ?? "Yesterday"}</p>
+        <p>Last Updated: {goal.lastUpdated ?? "No activity logged yet"}</p>
       </div>
 
       <div className="mb-4">
-        <h3 className="font-semibold mb-2">Activity Stats:</h3>
+        <h3 className="font-semibold mt-2">Activity Statistics:</h3>
         <p>
-          📅 Days with activity: {daysWithActivity}
-          <span className="ml-2 text-sm">({activeDaysPercentage}%)</span>
+          📅 Days with activity: {goal.activityLog.length}
+          {daysWithActivity > 0 && (
+            <span className="ml-2 text-sm">({activeDaysPercentage}%)</span>
+          )}
         </p>
-        <p>🔥 Longest streak: {longestStreak} days</p>
         <p>
-          🏆 Most productive: {bestDay.loggedUnits} hours
-          <span className="ml-2 text-sm">
-            on {new Date(bestDay.date).toLocaleDateString()}
-          </span>
+          🔥 Longest streak:{" "}
+          {longestStreak > 0 ? longestStreak + " days" : "No data yet"}
+        </p>
+        <p>
+          🏆 Most productive:{" "}
+          {bestDay
+            ? `${bestDay.loggedUnits} ${goal.units} on ${new Date(
+                bestDay.date
+              ).toLocaleDateString()}`
+            : "No data yet"}
         </p>
       </div>
 
       <div>
-        <h3 className="font-semibold mb-2">Overall Progress:</h3>
+        <h3 className="font-semibold mt-2">Overall Progress:</h3>
         <p>
-          📈 Accumulated: {goal.accUnits} {goal.units}
+          📈 Accumulated:{" "}
+          {goal.accUnits > 0 ? `${goal.accUnits} ${goal.units}` : "No data yet"}
         </p>
         <p>
-          📊 Average per day: {averagePerDay} {goal.units}
+          📊 Average per day:{" "}
+          {averagePerDay > 0 ? `${averagePerDay} ${goal.units}` : "No data yet"}
         </p>
       </div>
       <div className="border border-blue-500 inline-block rounded m-2">
@@ -134,7 +173,7 @@ export default function GoalOverview({
             });
           }}
         >
-          Log Activity
+          Log New Activity
         </Button>
       </div>
     </div>

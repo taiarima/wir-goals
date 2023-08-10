@@ -12,12 +12,14 @@ export default function Goal({ goal, selectedGoal, handleSelectedGoal }) {
   return (
     <li
       onClick={() => handleSelectedGoal(goal)}
-      className={`grid grid-cols-4 text-base text-blue-700  m-2 ${appliedStyle}`}
+      className={`grid grid-cols-4 text-base text-blue-700 m-2 ${appliedStyle} items-center`}
     >
-      <div>{goal.emoji}</div>
-      <div>{goal.name}</div>
-      <div>{goal.lastUpdated}</div>
-      <div>
+      <div className="flex items-center justify-center mr-4">{goal.emoji}</div>
+      <div className="flex items-center justify-center">{goal.name}</div>
+      <div className="flex items-center justify-center">
+        {goal.lastUpdated ?? "No activities logged"}
+      </div>
+      <div className="flex items-center justify-center">
         {goal.accUnits} {goal.units}
       </div>
     </li>
