@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/wir-goals/static/css/main.ace93209.css",
+    "main.js": "/wir-goals/static/js/main.2d8c485c.js",
+    "index.html": "/wir-goals/index.html",
+    "main.ace93209.css.map": "/wir-goals/static/css/main.ace93209.css.map",
+    "main.2d8c485c.js.map": "/wir-goals/static/js/main.2d8c485c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ace93209.css",
+    "static/js/main.2d8c485c.js"
+  ]
+}
